@@ -8,7 +8,16 @@
 # Adaptation Python 3: Ophir LOJKINE
 
 import re
+import unicodedata
 
+def remove_accents(input_str):
+    """
+    >>> remove_accents("héhé")
+    "hehe
+    """
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
+    only_ascii = nfkd_form.encode('ASCII', 'ignore')
+    return only_ascii.decode("utf8")
 
 def phonex(chaine):
     """Phonex est un algorithme de Soundex plus perfectionné encore que la version francisée de Soundex2.
@@ -25,6 +34,7 @@ def phonex(chaine):
     :return: L'encodage sous forme de nombre à virgule flottante
     """
     # 0 On met la chaîne en majuscules, on vire les caractères parasites
+    chaine = remove_accents(chaine)
     chaine = re.sub(r"[ \-.+*/,:;_']", "", chaine)
     chaine = chaine.upper()
 
